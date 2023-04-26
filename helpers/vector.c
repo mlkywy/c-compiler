@@ -50,8 +50,7 @@ struct vector *vector_clone(struct vector *vector)
     memcpy(new_vec, vector, sizeof(struct vector));
     new_vec->data = new_data_address;
 
-    // Saves are not cloned with vector_clone yet.
-    // assert(vector->saves == NULL);
+    // Saves are not cloned with vector_clone yet, assert(vector->saves == NULL);
     return new_vec;
 }
 
@@ -207,8 +206,7 @@ void vector_save(struct vector *vector)
 {
     // Let's save the state of this vector to its self
     struct vector tmp_vec = *vector;
-    // We not allowed to modify the saves so set it to NULL
-    // when we push it to the save stack.
+    // We not allowed to modify the saves so set it to NULL when we push it to the save stack
     tmp_vec.saves = NULL;
     vector_push(vector->saves, &tmp_vec);
 }
@@ -339,8 +337,7 @@ void vector_shift_right(struct vector *vector, int index, int amount)
         return;
     }
 
-    // We don't need to shift anything because we are out of bounds
-    // lets stretch the vector up to index+amount
+    // We don't need to shift anything because we are out of bounds, let's stretch the vector up to index+amount
     vector_stretch(vector, index + amount);
     vector_shift_right_in_bounds_no_increment(vector, index, amount);
 }
@@ -358,9 +355,10 @@ void vector_pop_at(struct vector *vector, int index)
 
 void vector_peek_pop(struct vector *vector)
 {
-    // Popping at a peek is an akward one
-    // we will need to shift all the elements to the left, annoying...
-    // This will also invalidate any pointers pointing directly to the vector data
+    /**
+     * Popping at a peek is an akward one we will need to shift all the elements to the left, annoying...
+     * This will also invalidate any pointers pointing directly to the vector data
+     */
     vector_pop_at(vector, vector->pindex);
 }
 
@@ -395,8 +393,7 @@ int vector_insert(struct vector *vector_dst, struct vector *vector_src, int dst_
 void vector_pop(struct vector *vector)
 {
 
-    // Popping from the vector will just decrement the index, no need to free memory
-    // the next push will overwrite it.
+    // Popping from the vector will just decrement the index, no need to free memory the next push will overwrite it
     vector->rindex -= 1;
     vector->count -= 1;
 
@@ -423,8 +420,7 @@ void vector_clear(struct vector *vector)
 
 void *vector_back_or_null(struct vector *vector)
 {
-    // We can't go back or we will access an invalid element
-    // out of bounds...
+    // We can't go back or we will access an invalid element out of bounds...
     if (!vector_in_bounds_for_at(vector, vector->rindex - 1))
     {
         return NULL;
